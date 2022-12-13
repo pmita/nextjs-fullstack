@@ -1,0 +1,44 @@
+@import '../../styles/base/variables';
+@import '../../styles/function/mixins';
+
+.navigation{
+    padding: 1rem 2rem;
+    background: $white;
+    min-height: 10vh;
+    width: 100vw;
+    @include flex(row, space-between, center);
+}
+
+.brand{
+    flex: 1;
+    @include flex(row, flex-start, center);
+    .brandLogo{
+        padding: 1rem;
+        background: $black;
+        color: $white;
+        font-size: $h2;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.callToAction{
+    flex: 1;
+    @include flex(row, flex-end, center);
+    gap: 1rem;
+}
+
+// @media screen and (max-width: 768px){
+//     .navigation{
+//         @include flex(column, center, center);
+//     }
+//     .brand{
+//         flex: 1;
+//         @include flex(row, center, center);
+//     }
+//     .callToAction{
+//         flex: 1;
+//         @include flex(row, center, center);
+//     }
+// }
