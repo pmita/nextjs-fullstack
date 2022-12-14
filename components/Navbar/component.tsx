@@ -1,10 +1,17 @@
-import styles from './style.module.scss';
+import React, { useContext } from 'react';
 // NEXT.JS 
 import Link from 'next/link';
+// CONTEXT
+import { AuthContext } from '../../context/AuthContext';
+// HOOKS
+import { useSignout } from '../../hooks/useSignout';
+// STYLES
+import styles from './style.module.scss';
 
 const Navbar = () => {
     // STATE & VARIABLES
-    const user = false;
+    const { user } = useContext(AuthContext); 
+    const { signout } = useSignout();
     return(
         <nav className={styles.navigation}>
             <div className={styles.brand}>
@@ -21,7 +28,7 @@ const Navbar = () => {
                                 Create Story
                             </Link>
                         </button>
-                        <button className='btn secondary'>
+                        <button className='btn secondary' onClick={signout}>
                             Sign Out
                         </button>
                     </>

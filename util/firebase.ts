@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
@@ -12,7 +12,7 @@ const firebaseConfig = {
     appId: "1:652657146908:web:9bf5113a06793ae52473d9"
 };
 
-if(!firebase.app.length) {
+if(!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 

@@ -1,0 +1,26 @@
+@import '../base/variables';
+@import '../function/mixins';
+
+.signupPage{
+    min-height: 90vh;
+    width: 100%;
+    display: grid;
+    place-items: center;
+}
+
+.signupForm{
+    min-width: 500px;
+    @include flex(column, space-evenly, center);
+    gap: 2.5rem;
+    label{
+        font-size: $h3;
+        font-weight: 500;
+        width: 100%;
+        input{
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid $black;
+        }
+    }
+}
+
