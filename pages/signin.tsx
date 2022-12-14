@@ -2,6 +2,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 // HOOKS
 import { useSignin } from '../hooks/useSignin';
+// STYLES
+import styles from '../styles/pages/SigninPage.module.scss';
 
 interface SigninForm {
     email: string;
@@ -23,8 +25,8 @@ const SigninPage = () => {
     }
 
     return(
-        <div className="signupPage">
-            <form className="signupForm" onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.signinPage}>
+            <form className={styles.signinForm} onSubmit={handleSubmit(onSubmit)}>
                 <label>
                     <span>Email</span>
                     <input type="email" {...register(

@@ -16,7 +16,7 @@ export const useSignout = () => {
 
         try{
             await fireAuth.signOut();
-            dispatch({ type: 'SIGN_OUT_SUCCES' });
+            dispatch({ type: 'SIGN_OUT_SUCCESS' });
             router.push('/signin');
         } catch(err) {
             dispatch({ type: 'SIGN_OUT_ERROR', payload: err.message });

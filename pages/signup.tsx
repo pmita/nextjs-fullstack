@@ -22,7 +22,6 @@ const SignupPage = () => {
 
     // EVENTS
     const onSubmit: SubmitHandler<SignupForm> = ({ email, password, username }) => {
-        // console.log(email, password, username);
         signup(email, password, username);
     }
 
@@ -40,9 +39,9 @@ const SignupPage = () => {
                                 message: "invalid email address"
                             }
                         }
-                    )}/>
+                        )}/>
                 </label>
-                {errors.email && <p>{errors.email.message}</p>}
+                {errors.email && <p className={styles.inputError}>{errors.email.message}</p>}
                 <label>
                     <span>Password</span>
                     <input type="password" {...register(
@@ -58,9 +57,9 @@ const SignupPage = () => {
                                 message: "password must be less than 20 characters"
                             }
                         }
-                    )}/>
+                        )}/>
                 </label>
-                {errors.password && <p>{errors.password.message}</p>}
+                {errors.password && <p className={styles.inputError}>{errors.password.message}</p>}
                 <label>
                     <span>Username</span>
                     <input type="text" {...register(
@@ -76,9 +75,9 @@ const SignupPage = () => {
                                 message: "username must be less than 20 characters"
                             }
                         }
-                    )}/>
+                        )}/>
                 </label>
-                {errors.username && <p>{errors.username.message}</p>}
+                {errors.username && <p className={styles.inputError}>{errors.username.message}</p>}
                 <button className="btn primary">Sign Up</button>
             </form>
         </div>
