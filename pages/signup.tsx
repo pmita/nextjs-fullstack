@@ -1,7 +1,12 @@
+import React, { useState, useEffect, useCallback } from 'react';
 // HOOKS
 import { useSignup } from '../hooks/useSignup';
+// FIREBASE
+import { fireStore } from '../util/firebase';
 // LIBRARIES
 import { useForm, SubmitHandler } from 'react-hook-form';
+// import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 // STYLES
 import styles from '../styles/pages/SignupPage.module.scss';
 
@@ -16,14 +21,37 @@ const SignupPage = () => {
     const { 
         register, 
         handleSubmit, 
+        watch,
         formState: { errors } 
-    } = useForm<SignupForm>({ mode: "onBlur" });
+    } = useForm<SignupForm>({ mode: "onChange", reValidateMode: "onChange" });
     const { signup } = useSignup();
+    const [isAvailable, setIsAvailable] = useState<boolean>(false);
+    const username = watch("username");
+
+    console.log(username);
 
     // EVENTS
-    const onSubmit: SubmitHandler<SignupForm> = ({ email, password, username }) => {
-        signup(email, password, username);
+    const onSubmit: SubmitHandler<SignupForm> = async ({ email, password, username }) => {
+        if(isAvailable){
+            signup(email, password, username);
+        }
     }
+
+    // FUNCTIONS
+    const checkUsername = useCallback(debounce(async (username) => {
+        if (username && username.length > 3) {
+            const usernameRef = fireStore.collection('usernames').doc(username);
+            const { exists } = await usernameRef.get();
+            setIsAvailable(!exists);
+        } else {
+            setIsAvailable(false);
+        }
+    }, 500), [username]);
+
+    // USEEFFECTS
+    useEffect(() => {
+        checkUsername(username);
+    }, [checkUsername, username]);
 
     return(
         <div className={styles.signupPage}>
@@ -78,6 +106,7 @@ const SignupPage = () => {
                         )}/>
                 </label>
                 {errors.username && <p className={styles.inputError}>{errors.username.message}</p>}
+                {(username?.length > 3 && !isAvailable) && <p className={styles.inputError}>Username is not available</p>}
                 <button className="btn primary">Sign Up</button>
             </form>
         </div>

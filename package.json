@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "eslint-plugin-react-hooks": "^5.0.0-next-84a0a171e-20221214",
     "firebase": "8.5",
+    "lodash": "^4.17.21",
+    "lodash.debounce": "^4.0.8",
     "next": "13.0.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -17,6 +20,7 @@
     "sass": "^1.56.2"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7",
     "@types/react": "18.0.26",
     "eslint": "8.29.0",
     "eslint-config-next": "13.0.6"
