@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 // HOOKS
 import { useSignup } from '../hooks/useSignup';
-// FIREBASE
-import { fireStore } from '../util/firebase';
+import { useDoesDocExist } from '../hooks/useDoesDocExist';
 // LIBRARIES
 import { useForm, SubmitHandler } from 'react-hook-form';
-// import debounce from 'lodash.debounce';
-import { debounce } from 'lodash';
 // STYLES
 import styles from '../styles/pages/SignupPage.module.scss';
 
@@ -23,12 +20,11 @@ const SignupPage = () => {
         handleSubmit, 
         watch,
         formState: { errors } 
-    } = useForm<SignupForm>({ mode: "onChange", reValidateMode: "onChange" });
+    } = useForm<SignupForm>({ mode: "onBlur", reValidateMode: "onChange" });
     const { signup } = useSignup();
-    const [isAvailable, setIsAvailable] = useState<boolean>(false);
+    // const [isAvailable, setIsAvailable] = useState<boolean>(false);
     const username = watch("username");
-
-    console.log(username);
+    const { doesDocumentExist, isAvailable } = useDoesDocExist(`usernames/${username}`);
 
     // EVENTS
     const onSubmit: SubmitHandler<SignupForm> = async ({ email, password, username }) => {
@@ -37,21 +33,12 @@ const SignupPage = () => {
         }
     }
 
-    // FUNCTIONS
-    const checkUsername = useCallback(debounce(async (username) => {
-        if (username && username.length > 3) {
-            const usernameRef = fireStore.collection('usernames').doc(username);
-            const { exists } = await usernameRef.get();
-            setIsAvailable(!exists);
-        } else {
-            setIsAvailable(false);
-        }
-    }, 500), [username]);
-
     // USEEFFECTS
     useEffect(() => {
-        checkUsername(username);
-    }, [checkUsername, username]);
+        doesDocumentExist();
+
+        return () => doesDocumentExist.cancel();
+    }, [doesDocumentExist, username]);
 
     return(
         <div className={styles.signupPage}>
