@@ -58,7 +58,6 @@ const UserProfile: React.FC<Props>= ({ user, posts}) => {
 }
 
 // const UserProfile= ({ user, posts}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-//     console.log(user, posts);
 //     return (
 //         <div className={styles.userProfilePage}>
 //             <PostCard post={{ title: 'This is a title' }}/>
