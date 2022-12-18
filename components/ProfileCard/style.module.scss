@@ -1,0 +1,8 @@
+@import '../../styles/base/variables';
+@import '../../styles/function/mixins';
+
+.profileCard{
+    min-height: 300px;
+    width: 100%;
+    @include flex(column, center, center);
+}

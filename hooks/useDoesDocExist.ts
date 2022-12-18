@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react';
 // LIBRARIES
 // import debounce from 'lodash.debounce';
-// FIREBASE
-import { fireStore } from '../util/firebase';
 import { DebouncedFunc, debounce } from 'lodash';
+// FIREBASE
+import { firestore } from '../util/firebase';
 
 // INTERFACES
 interface IUseDoesDocExist {
@@ -23,7 +23,7 @@ export const useDoesDocExist = (docRef: string): IUseDoesDocExist => {
     const doesDocumentExist = useCallback(debounce(async () => {
         setIsLoading(true);
         try{
-            const usernameRef = fireStore.doc(docRef);
+            const usernameRef = firestore.doc(docRef);
             const { exists } = await usernameRef.get();
             setIsAvailable(!exists);
             setIsLoading(false);
