@@ -1,5 +1,6 @@
+import React from 'react';
 // NEXT
-import { NextPage, GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 // COMPONENTS
 import PostCard from '../../components/PostCard';
 import ProfileCard from '../../components/ProfileCard';
@@ -15,10 +16,15 @@ interface UserDocument {
     email: string;
 }
 
-type Posts = Post[] | null;
-type User = UserDocument | null;
+// Are these correct?
 // type User = firebase.firestore.DocumentData[] | null;
 // type Posts = firebase.firestore.DocumentData[] | null;
+type Posts = Post[] | null;
+type User = UserDocument | null;
+type Props = {
+    user: User;
+    posts: Posts;
+}
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     // VARIABLES
@@ -42,15 +48,24 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     }
 }
 
-const UserProfile: NextPage = ({ user, posts}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    console.log(user, posts);
+const UserProfile: React.FC<Props>= ({ user, posts}) => {
     return (
         <div className={styles.userProfilePage}>
             <PostCard post={{ title: 'This is a title' }}/>
             <ProfileCard user={user}/>
-            <h1>{user.displayName}</h1>
         </div>
     );
 }
+
+// const UserProfile= ({ user, posts}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+//     console.log(user, posts);
+//     return (
+//         <div className={styles.userProfilePage}>
+//             <PostCard post={{ title: 'This is a title' }}/>
+//             <ProfileCard user={user}/>
+//             <h1>{user.displayName}</h1>
+//         </div>
+//     );
+// }
 
 export default UserProfile;
