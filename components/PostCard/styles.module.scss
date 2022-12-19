@@ -1,8 +1,0 @@
-@import '../../styles/base/variables';
-@import '../../styles/function/mixins';
-
-.postCard{
-    min-height: 300px;
-    width: 100%;
-    @include flex(column, center, center);
-}

@@ -1,0 +1,15 @@
+@import '../base/variables';
+@import '../function/mixins';
+
+.homePage{
+    text-align: center;
+    padding-bottom: 5rem;
+}
+
+.noMorePosts{
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 10px 0;
+    color: $black;
+    opacity: 0.8;
+}

@@ -2,7 +2,7 @@ import React from 'react';
 // NEXT
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 // COMPONENTS
-import PostCard from '../../components/PostCard';
+import PostFeed from '../../components/PostFeed';
 import ProfileCard from '../../components/ProfileCard';
 // FIREBASE
 import { findUserId, getPostsFromUser } from '../../util/firebaseFunctions';
@@ -21,7 +21,7 @@ interface UserDocument {
 // type Posts = firebase.firestore.DocumentData[] | null;
 type Posts = Post[] | null;
 type User = UserDocument | null;
-type Props = {
+type UserProfileProps = {
     user: User;
     posts: Posts;
 }
@@ -48,11 +48,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     }
 }
 
-const UserProfile: React.FC<Props>= ({ user, posts}) => {
+const UserProfile: React.FC<UserProfileProps>= ({ user, posts}) => {
     return (
         <div className={styles.userProfilePage}>
-            <PostCard post={{ title: 'This is a title' }}/>
             <ProfileCard user={user}/>
+            <PostFeed posts={posts}/>
         </div>
     );
 }

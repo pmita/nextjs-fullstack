@@ -1,11 +1,16 @@
+/* eslint-disable @next/next/no-img-element */
 // STYLES
 import styles from './style.module.scss';
 
 const ProfileCard = ({ user }) => {
     return (
         <div className={styles.profileCard}>
-            <h1>User name is this one</h1>
-            <h4>{user.displayName}</h4>
+            <img 
+                src="/assets/icons/hacker.png" 
+                alt="Profile Picture"
+                className={styles.profilePicture}
+            />
+            <h4 className={styles.userName}>{user.username}</h4>
         </div>
     );
 }
