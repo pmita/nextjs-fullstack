@@ -6,6 +6,7 @@ import { firestore } from '../../util/firebase';
 import firebase from 'firebase';
 // STYLES
 import styles from '../../styles/pages/PostPage.module.scss';
+import { useDocumentSnapshot } from '../../hooks/useDocumentSnapshot';
 
 // TYPES & INTERFACES
 interface PostPageProps {
@@ -47,13 +48,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
 }
 
-const PostPage: React.FC<PostPageProps> = ({ post, postPath }) => {
+const PostPage: React.FC<PostPageProps> = (props) => {
     // STATE & VARIABLES
-    console.log(postPath);
+    const { docSnapshot: postSnapshot } = useDocumentSnapshot(props.postPath);
+    const post = postSnapshot || props.post;
+
 
     return (
         <div className={styles.postPage}>
             <h1>{post.title}</h1>
+            <h2>{post.heartCount}</h2>
         </div>
     );
 }
