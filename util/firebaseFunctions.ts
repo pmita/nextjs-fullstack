@@ -58,7 +58,32 @@ const getPostsFromCollectionGroup = async (
     return docs as unknown as firebase.firestore.DocumentData[];
 }
 
+const getMorePostsFromCollectionGroup = async (
+    startAfter: firebase.firestore.Timestamp, 
+    limit: number
+ ): Promise<firebase.firestore.DocumentData[]> => {
+    const docsRef = firestore.collectionGroup('posts')
+    .where('published', '==', true)
+    .orderBy('createdAt', 'desc')
+    .startAfter(startAfter)
+    .limit(limit);
+    const docs = await docsRef.get()
+    .then(snapshot => {
+        return snapshot.docs.map(doc => ({
+            ...doc.data(),
+            createdAt: doc.data().createdAt.toMillis(),
+            updatedAt: doc.data().updatedAt.toMillis(),
+        }))
+    })
+    return docs as firebase.firestore.DocumentData[];
+}
+
 // EXPORT TYPES
 export type { Post };
 // EXPORT FUNCTIONS
-export { findUserId, getPostsFromUser, getPostsFromCollectionGroup };
+export { 
+    findUserId, 
+    getPostsFromUser, 
+    getPostsFromCollectionGroup,
+    getMorePostsFromCollectionGroup
+};

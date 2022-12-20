@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 // FIREBASE
 import firebase from 'firebase';
 import { firestore, fromMillis } from '../util/firebase';
-import { getPostsFromCollectionGroup, Post } from '../util/firebaseFunctions';
+import { getMorePostsFromCollectionGroup, getPostsFromCollectionGroup, Post } from '../util/firebaseFunctions';
 // COMPONENTS
 import PostFeed from '../components/PostFeed';
 // STYLES
@@ -43,23 +43,9 @@ const HomePage: React.FC<HomePageProps> = (props) => {
     // convert createAt property to firestore timestamp
     const startAfter = typeof lastPost.createdAt === 'number' ? fromMillis(lastPost.createdAt) : lastPost.createdAt;
     try{
-      const docsRef = firestore.collectionGroup('posts')
-      .where('published', '==', true)
-      .orderBy('createdAt', 'desc')
-      .startAfter(startAfter)
-      .limit(LIMIT)
-      const docs = await docsRef.get()
-      .then(snapshot => {
-        return snapshot.docs.map(doc => ({
-          ...doc.data(),
-          createdAt: doc.data().createdAt.toMillis(),
-          updatedAt: doc.data().updatedAt.toMillis(),
-        }))
-      })
-
+      const docs = await getMorePostsFromCollectionGroup(startAfter, LIMIT);
       setPosts(prevPost => [...prevPost, ...docs]);
       setisPending(false);
-
       if (docs.length < LIMIT) {
         setPostsEnd(true);
       }
