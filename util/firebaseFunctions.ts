@@ -4,8 +4,8 @@ import { firestore } from '../util/firebase';
 
 interface Post {
     title: string;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: number;
+    updatedAt: number;
     heartCount: number;
     published: boolean;
     content: string;
@@ -14,11 +14,49 @@ interface Post {
     username: string;
 }
 
-const findUserId = async (username: string): Promise<firebase.firestore.DocumentData> => {
+const findUserId = async (
+    username: string
+): Promise<firebase.firestore.DocumentData> => {
     const userRef = firestore.collection('users')
     .where('username', '==', username).limit(1);
     const userDocument = (await userRef.get()).docs[0];
     return userDocument as firebase.firestore.DocumentData;
+}
+
+
+const getPostFromUser = async (
+    userId: string, 
+    slug: string
+): Promise<Post> => {
+    const postRef = firestore.collection('users').doc(userId)
+    .collection('posts').doc(slug);
+    const postDoc = await postRef.get()
+    .then(doc => {
+        return {
+            ...doc.data(),
+            createdAt: doc.data().createdAt.toMillis(),
+            updatedAt: doc.data().updatedAt.toMillis(),
+        }
+    })
+    return postDoc as unknown as Post;
+}
+
+const getPostFromUserAB = async (
+    userId: string, 
+    slug: string
+): Promise<[string, Post]> => {
+    const postRef = firestore.collection('users').doc(userId)
+    .collection('posts').doc(slug);
+    const postPath = postRef.path;
+    const postDoc = await postRef.get()
+    .then(doc => {
+        return {
+            ...doc.data(),
+            createdAt: doc.data().createdAt.toMillis(),
+            updatedAt: doc.data().updatedAt.toMillis(),
+        }
+    })
+    return [postPath, postDoc as unknown as Post];
 }
 
 
@@ -83,7 +121,9 @@ export type { Post };
 // EXPORT FUNCTIONS
 export { 
     findUserId, 
+    getPostFromUser,
     getPostsFromUser, 
     getPostsFromCollectionGroup,
+    getPostFromUserAB,
     getMorePostsFromCollectionGroup
 };
