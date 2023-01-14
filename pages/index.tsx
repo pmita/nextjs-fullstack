@@ -35,12 +35,11 @@ const HomePage: React.FC<HomePageProps> = (props) => {
   const [isPending, setisPending] = useState<boolean>(false);
   const [postsEnd, setPostsEnd] = useState<boolean>(false);
 
+
   // EVENTS
   const loadMorePosts = async () => {
     setisPending(true)
-    // Get last item
     const lastPost = posts[posts.length - 1];
-    // convert createAt property to firestore timestamp
     const startAfter = typeof lastPost.createdAt === 'number' ? fromMillis(lastPost.createdAt) : lastPost.createdAt;
     try{
       const docs = await getMorePostsFromCollectionGroup(startAfter, LIMIT);
@@ -53,6 +52,8 @@ const HomePage: React.FC<HomePageProps> = (props) => {
       console.log(err);
     }
   }
+
+  // FUNCTIONS
 
   return (
     <div className={styles.homePage}>

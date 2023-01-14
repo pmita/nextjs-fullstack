@@ -6,21 +6,34 @@
     padding: 5rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-auto-rows: 300px;
+    grid-auto-rows: 280px;
     gap: 1rem;
 }
 
 .postCard{
     background: $black;
     color: $white;
-    padding: 1rem;
+    padding: 1rem 1rem 2rem 1rem;
+    border-radius: 25px;
     @include flex(column, space-between, center);
+    gap: 1rem;
 }
 
 .postCardContent{
-    height:70%;
+    height:80%;
     width: 100%;
+    background: $white;
+    color: $black;
+    border-radius: 25px;
+    padding: 1rem;
     @include flex(row, center, center);
+    position: relative;
+    overflow-y: hidden;
+    &:hover{
+        .postCardCTA{
+            transform: translateY(0%);
+        } 
+    }
     h4{
         text-align: center;
     }
@@ -28,7 +41,17 @@
 
 .postCardFooter{
     width: 100%;
+    align-self: stretch;
+    justify-self: stretch;
     @include flex(row, space-between, center);
+    img{
+        height: 15px;
+        width: 15px;
+        margin-right: 1rem;
+        &:hover{
+            cursor: pointer;
+        }
+    }
     a{
         color: $white;
         opacity: 0.3;
@@ -36,4 +59,16 @@
             cursor: pointer;
         }
     }
+}
+
+.postCardCTA{
+    border-radius: 25px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: $white;
+    @include flex(row, center, center);
+    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    transform: translateY(100%);
 }

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 // NEXT
 import { useRouter } from 'next/router';
 // FIREBASE
-import { fireAuth, fireStore } from '../util/firebase';
+import { fireAuth, firestore } from '../util/firebase';
 // CONTEXT
 import { AuthContext } from '../context/AuthContext';
 
@@ -25,10 +25,10 @@ export const useSignup = () => {
             }
 
             // create references to firestore collections
-            const userRef = fireStore.collection('users').doc(response.user.uid);
-            const usernameRef = fireStore.collection('usernames').doc(username);
+            const userRef = firestore.collection('users').doc(response.user.uid);
+            const usernameRef = firestore.collection('usernames').doc(username);
             // create firebase batch
-            const batch = fireStore.batch();
+            const batch = firestore.batch();
             // add details to eachh document
             batch.set(userRef, { email, username });
             batch.set(usernameRef, { uid: response.user.uid });

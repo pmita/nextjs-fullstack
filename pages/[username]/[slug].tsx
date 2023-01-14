@@ -1,9 +1,8 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 // FIREBASE
-import { findUserId, getPostFromUser, getPostsFromCollectionGroup, getPostFromUserAB } from '../../util/firebaseFunctions';
+import { findUserId, getPostFromUserAB } from '../../util/firebaseFunctions';
 import type { Post } from '../../util/firebaseFunctions';
 import { firestore } from '../../util/firebase';
-import firebase from 'firebase';
 // STYLES
 import styles from '../../styles/pages/PostPage.module.scss';
 import { useDocumentSnapshot } from '../../hooks/useDocumentSnapshot';
