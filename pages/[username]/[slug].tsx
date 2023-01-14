@@ -52,6 +52,8 @@ const PostPage: React.FC<PostPageProps> = (props) => {
     const { docSnapshot: postSnapshot } = useDocumentSnapshot(props.postPath);
     const post = postSnapshot || props.post;
 
+    console.log(postSnapshot);
+
 
     return (
         <div className={styles.postPage}>

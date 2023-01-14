@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import firebase from 'firebase';
 import { firestore } from '../util/firebase';
 
-export const useCollectionSnapshot = async (collectionPath: string) => {
+export const useCollectionSnapshot = (id: string) => {
     // STATE & VARIABLES
-    const [colSnap, setColSnap] = useState<firebase.firestore.DocumentData[] | null>(null);
+    const [collectionSnapshot, setCollectionSnapshot] = useState<firebase.firestore.DocumentData[] | null>(null);
     const [isPending, setIsPending] = useState<boolean>(false);
     const [error, setError] = useState<Error | string | null>(null);
 
@@ -15,7 +15,8 @@ export const useCollectionSnapshot = async (collectionPath: string) => {
         setIsPending(true);
         setError(null);
 
-        const collectionRef = firestore.collection(collectionPath);
+        // const collectionRef = firestore.collection(collectionPath);
+        const collectionRef = firestore.collection('users').doc(id).collection('posts');
         const unsubscribe = collectionRef.onSnapshot(snapshot => {
             const docs = snapshot.docs.map(doc => {
                 return {
@@ -24,7 +25,7 @@ export const useCollectionSnapshot = async (collectionPath: string) => {
                     updatedAt: doc.data().updatedAt.toMillis(),
                 }
             })
-            setColSnap(docs);       
+            setCollectionSnapshot(docs);       
             setIsPending(false);
         }, (error => {
             setError(error);
@@ -33,7 +34,7 @@ export const useCollectionSnapshot = async (collectionPath: string) => {
 
         // unsubscribe 
         return () => unsubscribe();
-    }, [collectionPath]);
+    }, [id]);
 
-    return { colSnap, isPending, error };
+    return { collectionSnapshot, isPending, error };
 }

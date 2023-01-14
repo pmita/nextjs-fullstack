@@ -1,0 +1,25 @@
+.postsList{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 100px;
+  gap: 1rem;
+}
+
+.postItem{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 3px solid black;
+  h4{
+    flex: 1;
+  }
+  .cta{
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+  }
+}

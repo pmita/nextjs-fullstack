@@ -1,19 +1,23 @@
 import { useContext, useState } from 'react';
 // COMPONENT
 import { AuthCheck } from '../../components/AuthCheck/AuthCheck';
+import AdminPostList from '../../components/AdminPostList';
 // HOOKS
 import { AuthContext } from '../../context/AuthContext';
 import { useCollectionSnapshot } from '../../hooks/useCollectionSnapshot';
-// FIREBASE
-import { firestore } from '../../util/firebase';
+// LIBRARIES
+import { useForm, SubmitHandler } from 'react-hook-form';
 // STYLES
 import styles from '../../styles/pages/AdminPage.module.scss';
 
 const AdminPage = () => {
     return (
-        <div className="admin-page">
+        <div className={styles.adminPage}>
             <AuthCheck>
-                <PostList />
+                <>
+                    <CreatePost />
+                    <AdminPosts />
+                </>
             </AuthCheck>
         </div>
     );
@@ -22,62 +26,60 @@ const AdminPage = () => {
 export default AdminPage;
 
 // COMPONENTS
-const PostList = () => {
+const AdminPosts = () => {
     // STATE & VARIABLES
-    const [data, setData] = useState([]);
     const { user } = useContext(AuthContext);
-    const postsRef = firestore.collection('users').doc(user.uid).collection('posts');
-    const postsPath = postsRef.path;
-
-    const unsubscribe = firestore.collection(postsPath).onSnapshot(snapshot => {
-        let data = [];
-        snapshot.docs.forEach(doc => {
-            data.push({...doc.data()});
-        })
-        setData(data);  
-    }, error => {
-        console.log(error);
-    });
-
-    // const { colSnap: docs  } = useCollectionSnapshot(postsPath);
-    // const posts = postsRef.get().then(snapshot => {
-    //     let data = [];
-    //     snapshot.docs.forEach(doc => {
-    //         data.push({...doc.data()})
-    //     })
-    //     return data;
-    // })
-
-    // const [ data, setData] = useState([]);
-    // const postsRef = firestore.collection('users').doc(user?.uid).collection('posts');
-    // const postsPath = postsRef.path;
-    // const postsQuery = postsRef.orderBy('createdAt', 'desc');
-    // const posts = postsQuery.get().then(snapshot => {
-    //     let data = [];
-    //     snapshot.docs.forEach(doc => {
-    //         console.log(doc.data());
-    //         data.push({...doc.data()});
-    //     })
-    //     return data;
-    // });
-    // const postsSnap = postsRef
-    // .onSnapshot(snapshot => {
-    //     let data = [];
-    //     snapshot.docs.forEach(doc => {
-    //         console.log(doc.data());
-    //         data.push({...doc.data()});
-    //     })  
-    //     // setData(data);
-    //     return data;
-
-    // });
-
-    console.log(postsRef, data);
+    const { collectionSnapshot: posts } = useCollectionSnapshot(user.uid);
     
     return (
-        <div>
+        <div className={styles.adminPosts}>
             <h1>Post List Title</h1>
+            {/* {posts && posts.map(post => <AdminPostItem key={post.id} post={post} /> )} */}
+            {/* <PostFeed posts={posts} /> */}
+            <AdminPostList posts={posts} />
         </div>
     );
+}
+
+interface CreatePostForm {
+    title: string;
+}
+
+const CreatePost = () => {
+    // STATE & VARIABLES
+    const {
+        register,
+        handleSubmit,
+        watch, 
+        formState: { errors }
+    } = useForm<CreatePostForm>({ mode: "onChange", });
+    const { user } = useContext(AuthContext);
+
+    // EVENTS
+    const onSubmit: SubmitHandler<CreatePostForm> = async ({ title }) => {
+        // Create a new post in firestore
+    }
+
+    return (
+        <div className={styles.createPostItem}>
+            <form className="createPost">
+                <input
+                    type="text"
+                    placeholder="Title of your post"
+                    {...register("title", {
+                        required: { value: true, message: "Title is required" },
+                        minLength: { value: 3, message: "Title must be at least 3 characters" },
+                        maxLength: { value: 20, message: "Title must be less than 20 characters" },
+                        pattern: { value: /^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/, message: "Title must be alphanumeric" }
+                    })}
+                />
+                <button className="btn primary">Create new Post</button>
+            </form>
+            {/* {item.published 
+                ? <button className="btn secondary">Unpublish</button>
+                : <button className="btn primary">Publish</button>
+            } */}
+        </div>
+    )
 }
 
