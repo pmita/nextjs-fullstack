@@ -5,28 +5,67 @@
     width: 100%;
     padding: 5rem;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-auto-rows: 280px;
+    grid-template-columns: repeat(auto-fill, minmax(375px, 1fr));
+    grid-auto-rows: 520px;
     gap: 1rem;
 }
 
 .postCard{
     background: $black;
     color: $white;
-    padding: 1rem 1rem 2rem 1rem;
-    border-radius: 25px;
-    @include flex(column, space-between, center);
+    padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+    border-radius: 17px;
+    @include flex(column, space-between, flex-start);
     gap: 1rem;
 }
 
+.postCardHeader{
+  @include flex(row, flex-start, center);
+  gap: 0.5rem;
+  .postCardAvatar img{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+  }
+  .postCardUsername{
+    h4{
+      color: #FFFFFF;
+    }
+    h6{
+      color: #7D8389;
+    }
+  }
+}
+
+.postCardTitle{
+  h4{
+    color: $white;
+    padding: 1rem 0;
+    font-family: 'Poppins Regular', sans-serif;
+  }
+}
+
 .postCardContent{
+  background: $white;
+  height: 75%;
+  width: 100%;
+  @include flex(column, center, center);
+  border-radius: 15px;
+  padding: 2rem;
+  h4{
+    color: $black;
+  }
+}
+
+.postCardConten{
     height:80%;
     width: 100%;
     background: $white;
     color: $black;
     border-radius: 25px;
     padding: 1rem;
-    @include flex(row, center, center);
+    @include flex(column, flex-start, center);
     position: relative;
     overflow-y: hidden;
     &:hover{
@@ -40,10 +79,8 @@
 }
 
 .postCardFooter{
-    width: 100%;
-    align-self: stretch;
-    justify-self: stretch;
-    @include flex(row, space-between, center);
+    @include flex(row, flex-start, center);
+    gap: 0.5rem;
     img{
         height: 15px;
         width: 15px;
@@ -53,22 +90,9 @@
         }
     }
     a{
-        color: $white;
-        opacity: 0.3;
+        color: #7D8389;
         &:hover{
             cursor: pointer;
         }
     }
-}
-
-.postCardCTA{
-    border-radius: 25px;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background: $white;
-    @include flex(row, center, center);
-    transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-    transform: translateY(100%);
 }
