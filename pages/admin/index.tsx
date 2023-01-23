@@ -19,6 +19,7 @@ const AdminPage = () => {
         <div className={styles.adminPage}>
             <AuthCheck>
                 <>
+                    <h1>Admin</h1>
                     <CreatePost />
                     <AdminPosts />
                 </>
@@ -37,9 +38,6 @@ const AdminPosts = () => {
     
     return (
         <div className={styles.adminPosts}>
-            <h1>Post List Title</h1>
-            {/* {posts && posts.map(post => <AdminPostItem key={post.id} post={post} /> )} */}
-            {/* <PostFeed posts={posts} /> */}
             <AdminPostList posts={posts} />
         </div>
     );
