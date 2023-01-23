@@ -1,13 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // FIREBASE
 import firebase from 'firebase';
 import { firestore } from '../util/firebase';
+
+const useMounted = () => {
+    const isMounted = useRef(false);
+    
+    useEffect(() => {
+        isMounted.current = true;
+
+        return () => {
+            isMounted.current = false
+        };
+    }, []);
+
+    return isMounted;
+}
 
 export const useCollectionSnapshot = (id: string) => {
     // STATE & VARIABLES
     const [collectionSnapshot, setCollectionSnapshot] = useState<firebase.firestore.DocumentData[] | null>(null);
     const [isPending, setIsPending] = useState<boolean>(false);
     const [error, setError] = useState<Error | string | null>(null);
+    const isMounted = useMounted();
 
     // useEFFECT
     useEffect(() => {
@@ -25,16 +40,16 @@ export const useCollectionSnapshot = (id: string) => {
                     updatedAt: doc.data().updatedAt.toMillis(),
                 }
             })
-            setCollectionSnapshot(docs);       
-            setIsPending(false);
+            if (isMounted.current) setCollectionSnapshot(docs);
+            if (isPending && isMounted.current) setIsPending(false);
         }, (error => {
-            setError(error);
-            setIsPending(false);
+            if (isMounted.current) setError(error);
+            if (isPending && isMounted.current) setIsPending(false);
         }))
 
         // unsubscribe 
         return () => unsubscribe();
-    }, [id]);
+    }, [id, isMounted, isPending]);
 
     return { collectionSnapshot, isPending, error };
 }
