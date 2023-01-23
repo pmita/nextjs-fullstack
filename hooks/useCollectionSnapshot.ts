@@ -2,20 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 // FIREBASE
 import firebase from 'firebase';
 import { firestore } from '../util/firebase';
-
-const useMounted = () => {
-    const isMounted = useRef(false);
-    
-    useEffect(() => {
-        isMounted.current = true;
-
-        return () => {
-            isMounted.current = false
-        };
-    }, []);
-
-    return isMounted;
-}
+// HOOKS
+import { useMounted } from './useMounted';
 
 export const useCollectionSnapshot = (id: string) => {
     // STATE & VARIABLES
@@ -26,12 +14,15 @@ export const useCollectionSnapshot = (id: string) => {
 
     // useEFFECT
     useEffect(() => {
-        // set state
         setIsPending(true);
         setError(null);
 
         // const collectionRef = firestore.collection(collectionPath);
-        const collectionRef = firestore.collection('users').doc(id).collection('posts');
+        const collectionRef = firestore
+        .collection('users')
+        .doc(id)
+        .collection('posts')
+        .orderBy('createdAt', 'desc');
         const unsubscribe = collectionRef.onSnapshot(snapshot => {
             const docs = snapshot.docs.map(doc => {
                 return {
@@ -47,7 +38,6 @@ export const useCollectionSnapshot = (id: string) => {
             if (isPending && isMounted.current) setIsPending(false);
         }))
 
-        // unsubscribe 
         return () => unsubscribe();
     }, [id, isMounted, isPending]);
 

@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 // FIREBASE
 import { firestore } from '../util/firebase';
 import firebase from 'firebase';
+// HOOKS
+import { useMounted } from './useMounted';
 
 export const useDocumentSnapshot = (docPath: string) => {
     // STATE & VARIABLES
     const [docSnapshot, setDocSnapshot] = useState<firebase.firestore.DocumentData | null>(null);
     const [isPending, setIsPending] = useState<boolean>(false);
     const [error, setError] = useState<Error | string | null>(null);
+    const isMounted = useMounted();
 
     // USEEFFECT
     useEffect(() => {
@@ -18,22 +21,23 @@ export const useDocumentSnapshot = (docPath: string) => {
         const subDocRef = firestore.doc(docPath);
         const unsubscribe = subDocRef.onSnapshot(doc => {
             if (doc.exists) {
-                setDocSnapshot(doc.data());
-                setIsPending(false);
+                if (isMounted.current) setDocSnapshot(doc.data());
+                if (isPending && isMounted.current) setIsPending(false);
             } else {
-                setDocSnapshot(null);
-                setIsPending(false);
-                setError('Document does not exist');
-                setIsPending(false);
+                if (isMounted.current) {
+                    setDocSnapshot(null); 
+                    setError('Document does not exist');
+                }
+                if (isPending && isMounted.current) setIsPending(false);
             }
         }, (error => {
-            setError(error);
-            setIsPending(false);
+            if (isMounted.current) setError(error);
+            if (isPending && isMounted.current) setIsPending(false);
 
         }))
 
         return () => unsubscribe()
-    }, [docPath]);
+    }, [docPath, isMounted, isPending]);
 
     return { docSnapshot, isPending, error };
 }
